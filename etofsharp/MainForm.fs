@@ -18,8 +18,11 @@ type MainForm () as this =
         base.Content <- layout;
 
         // create a few commands that can be used for the menu and toolbar
-        let clickMe = new Command(MenuText = "Click Me!", ToolBarText = "Click Me!")
+        let clickMe = new Command(MenuText = "Click Me!", ToolBarText = "Click Me Toolbar!")
         clickMe.Executed.Add(fun e -> MessageBox.Show(this, "I was clicked!") |> ignore)
+
+        let cmdNew = new Command(MenuText = "New", ToolBarText = "New")
+        cmdNew.Executed.Add(fun e -> MessageBox.Show(this, "New Clicked") |> ignore)
 
         let quitCommand = new Command(MenuText = "Quit")
         quitCommand.Shortcut <- Application.Instance.CommonModifier ||| Keys.Q
@@ -34,6 +37,7 @@ type MainForm () as this =
         base.Menu <- new MenuBar()
         let fileItem = new ButtonMenuItem(Text = "&File")
         fileItem.Items.Add(clickMe) |> ignore
+        fileItem.Items.Add(cmdNew) |> ignore
         base.Menu.Items.Add(fileItem)
 
         (* add more menu items to the main menu...
@@ -49,3 +53,4 @@ type MainForm () as this =
 
         base.ToolBar <- new ToolBar()
         base.ToolBar.Items.Add(clickMe)
+        base.ToolBar.Items.Add(cmdNew)

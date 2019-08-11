@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "etofsharp", "etofsharp\etofsharp.fsproj", "{22B93259-20B2-4AB8-B446-B40DE311827A}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "etofsharp.Desktop", "etofsharp.Desktop\etofsharp.Desktop.fsproj", "{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22B93259-20B2-4AB8-B446-B40DE311827A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22B93259-20B2-4AB8-B446-B40DE311827A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22B93259-20B2-4AB8-B446-B40DE311827A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22B93259-20B2-4AB8-B446-B40DE311827A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

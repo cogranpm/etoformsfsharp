@@ -14,7 +14,40 @@ type MainForm () as this =
         let layout = new StackLayout()
         layout.Items.Add(new StackLayoutItem(new Label(Text = "Hello World!")))
         // Add more controls here
+        let txtName = new TextBox()
+        layout.Items.Add(new StackLayoutItem(txtName))
 
+        //calendar
+        let cal = new Calendar()
+        layout.Items.Add(new StackLayoutItem(cal))
+
+        //checkbox
+        let chk = new CheckBox()
+        layout.Items.Add(new StackLayoutItem(chk))
+
+        //combo box 
+        let cbo = new ComboBox()
+        cbo.Items.Add("Feathers")
+        cbo.Items.Add("Scales")
+        cbo.Items.Add("Fur")
+        layout.Items.Add(new StackLayoutItem(cbo))
+        cbo.SelectedKeyChanged.Add(fun e -> MessageBox.Show("combo box clicked " + cbo.SelectedValue.ToString()) |> ignore)
+
+        //date time picker
+        let dtp = new DateTimePicker()
+        //layout.Items.Add(new StackLayoutItem(dtp))
+
+        //splitter
+        let splitter = new Splitter()
+        let panel1 = new Panel()
+        let panel2 = new Panel()
+        splitter.Panel1 = panel1.Content |> ignore
+        splitter.Panel2 = panel2.Content |> ignore
+        splitter.Orientation = Orientation.Vertical |> ignore
+        splitter.Position = 200 |> ignore
+
+
+        layout.Items.Add(new StackLayoutItem(splitter))
         base.Content <- layout;
 
         // create a few commands that can be used for the menu and toolbar

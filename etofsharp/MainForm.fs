@@ -36,20 +36,34 @@ type MainForm () as this =
 
         //date time picker
         let dtp = new DateTimePicker()
-        //layout.Items.Add(new StackLayoutItem(dtp))
+        layout.Items.Add(new StackLayoutItem(dtp))
+
+        let listbox = new ListBox()
+        listbox.Items.Add("fart")
+        listbox.Items.Add("sneeze")
 
         //splitter
         let splitter = new Splitter()
+
+        //panel 1
         let panel1 = new Panel()
+        let layoutPanel1 = new StackLayout()
+        layoutPanel1.Items.Add(new StackLayoutItem(listbox))
+        panel1.Content <- layoutPanel1
+
+        //panel 2
         let panel2 = new Panel()
-        splitter.Panel1 = panel1.Content |> ignore
-        splitter.Panel2 = panel2.Content |> ignore
-        splitter.Orientation = Orientation.Vertical |> ignore
-        splitter.Position = 200 |> ignore
+        panel2.Content <- layout
+
+        splitter.Panel1 <- panel1
+        splitter.Panel2 <- panel2 
+        splitter.Orientation <- Orientation.Horizontal 
+        splitter.Position <- 200
 
 
-        layout.Items.Add(new StackLayoutItem(splitter))
-        base.Content <- layout;
+        //layout.Items.Add(new StackLayoutItem(splitter))
+        //base.Content <- layout;
+        base.Content <- splitter
 
         // create a few commands that can be used for the menu and toolbar
         let clickMe = new Command(MenuText = "Click Me!", ToolBarText = "Click Me Toolbar!")

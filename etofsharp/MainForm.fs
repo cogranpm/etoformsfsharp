@@ -5,6 +5,7 @@ open Eto.Forms
 open Eto.Drawing
 
 open AppConstants
+open Database
 
 
 type MainForm () as this =
@@ -96,6 +97,7 @@ type MainForm () as this =
             dlg.ShowDialog(this) |> ignore
             )
 
+        Database.opendatabase
         base.Menu <- new MenuBar()
         let fileItem = new ButtonMenuItem(Text = "&File")
         fileItem.Items.Add(clickMe) |> ignore

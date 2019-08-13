@@ -6,12 +6,14 @@ open Eto.Drawing
 
 open AppConstants
 
+
 type MainForm () as this =
     inherit Form()
     do
         base.Title <- AppConstants.APP_NAME
         base.ClientSize <- new Size(400, 350)
 
+        (* all old stuff
         // table with three rows
         let layout = new StackLayout()
         layout.Items.Add(new StackLayoutItem(new Label(Text = "Hello World!")))
@@ -38,23 +40,34 @@ type MainForm () as this =
         //date time picker
         let dtp = new DateTimePicker()
         layout.Items.Add(new StackLayoutItem(dtp))
+        *)
+
 
         let listbox = new ListBox()
-        listbox.Items.Add("fart")
-        listbox.Items.Add("sneeze")
+        List.iter( fun (x: String) -> listbox.Items.Add(x)) AppConstants.subjects
+
+
 
         //splitter
         let splitter = new Splitter()
 
         //panel 1
         let panel1 = new Panel()
-        let layoutPanel1 = new StackLayout()
-        layoutPanel1.Items.Add(new StackLayoutItem(listbox))
+        let layoutPanel1 = new TableLayout()
+        layoutPanel1.Rows.Add(new TableRow(new TableCell(listbox)))
+        //layoutPanel1.Items.Add(new StackLayoutItem(listbox))
         panel1.Content <- layoutPanel1
 
         //panel 2
         let panel2 = new Panel()
-        panel2.Content <- layout
+        let lstSubjectBody = new ListBox()
+        lstSubjectBody.Width <- 200
+        let txtBody = new RichTextArea()
+        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstSubjectBody), new TableCell( txtBody )))
+        panel2.Content <- layoutPanel2
+
+        listbox.SelectedIndexChanged.Add(fun e -> AppConstants.selectsubject listbox lstSubjectBody)
+        lstSubjectBody.SelectedIndexChanged.Add(fun e -> AppConstants.selectsyntax lstSubjectBody txtBody)
 
         splitter.Panel1 <- panel1
         splitter.Panel2 <- panel2 

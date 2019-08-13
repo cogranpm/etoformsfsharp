@@ -5,6 +5,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "etofsharp", "etofsharp\etof
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "etofsharp.Desktop", "etofsharp.Desktop\etofsharp.Desktop.fsproj", "{A3C7DF5B-1CAD-433C-9649-557ECE3DD71C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7A91961-B474-4E64-9299-16C2CD48A9AA}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

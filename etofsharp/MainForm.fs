@@ -4,11 +4,12 @@ open System
 open Eto.Forms
 open Eto.Drawing
 
+open AppConstants
 
 type MainForm () as this =
     inherit Form()
     do
-        base.Title <- "My Eto Form"
+        base.Title <- AppConstants.APP_NAME
         base.ClientSize <- new Size(400, 350)
 
         // table with three rows

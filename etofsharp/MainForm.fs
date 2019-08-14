@@ -5,7 +5,7 @@ open Eto.Forms
 open Eto.Drawing
 
 open AppConstants
-open Database
+open db
 
 
 type MainForm () as this =
@@ -13,6 +13,7 @@ type MainForm () as this =
     do
         base.Title <- AppConstants.APP_NAME
         base.ClientSize <- new Size(400, 350)
+        this.Closed.Add(fun e -> Database.closedatabase)
 
         (* all old stuff
         // table with three rows
@@ -97,7 +98,8 @@ type MainForm () as this =
             dlg.ShowDialog(this) |> ignore
             )
 
-        Database.opendatabase
+        db.Database.opendatabase
+
         base.Menu <- new MenuBar()
         let fileItem = new ButtonMenuItem(Text = "&File")
         fileItem.Items.Add(clickMe) |> ignore

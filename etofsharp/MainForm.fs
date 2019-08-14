@@ -64,8 +64,15 @@ type MainForm () as this =
         let panel2 = new Panel()
         let lstSubjectBody = new ListBox()
         lstSubjectBody.Width <- 200
+
+        let gridview = new GridView()
+        gridview.Columns.Add(new GridColumn(HeaderText = "magnificent"))
+
         let txtBody = new RichTextArea()
-        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstSubjectBody), new TableCell( txtBody )))
+        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstSubjectBody), new TableCell( gridview )))
+
+        //layoutPanel2.Rows.Add(new TableRow(new TableCell(gridview)))
+
         panel2.Content <- layoutPanel2
 
         listbox.SelectedIndexChanged.Add(fun e -> AppConstants.selectsubject listbox lstSubjectBody)

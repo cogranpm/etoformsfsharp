@@ -61,7 +61,10 @@ type MainForm () as this =
         cmdNew.Executed.Add(fun e -> MessageBox.Show(this, "New Clicked") |> ignore)
 
         let cmdNewSubject = new Command(MenuText="New &Subject", ToolBarText="Subject")
-        cmdNewSubject.Executed.Add(fun e -> this.somefunc() |> ignore)
+        cmdNewSubject.Executed.Add(fun e -> this.newsubject() |> ignore)
+
+        let cmdNewChapter = new Command(MenuText="New &Chapter", ToolBarText="Chapter")
+        cmdNewChapter.Executed.Add(fun e -> this.newchapter() |> ignore)
 
         let quitCommand = new Command(MenuText = "Quit")
         quitCommand.Shortcut <- Application.Instance.CommonModifier ||| Keys.Q
@@ -86,7 +89,9 @@ type MainForm () as this =
 
         let editItem = new ButtonMenuItem(Text = "&Edit")
         editItem.Items.Add(cmdNewSubject) |> ignore
+        editItem.Items.Add(cmdNewChapter) |> ignore
         base.Menu.Items.Add(editItem)
+
         let viewItem = new ButtonMenuItem(Text = "&View")
         base.Menu.Items.Add(viewItem)
        
@@ -100,10 +105,17 @@ type MainForm () as this =
         base.ToolBar.Items.Add(cmdNew)
 
 
-    member this.somefunc() = 
+    member this.newsubject() = 
         let subjectDialog = new SubjectDialog()
         let result = subjectDialog.ShowModal(this)
-        printfn("hello there")
+        0
+
+    member this.newchapter() = 
+       let dialog = new ChapterDialog()
+       let result = dialog.ShowModal(this)
+       0
+
+
         (* all old stuff
         // table with three rows
         let layout = new StackLayout()

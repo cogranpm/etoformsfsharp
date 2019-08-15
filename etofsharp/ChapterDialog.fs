@@ -7,13 +7,13 @@ open Eto.Drawing
 open db
 open AppConstants
 
-type SubjectDialog() as this =
+type ChapterDialog() as this =
     inherit Dialog()
 
     let mutable txtName: TextBox = new TextBox()
 
     do
-        base.Title <- "Subject"
+        base.Title <- "Chapter"
         base.ClientSize <- new Size(600, 600)
         let padding = new Padding(10)
         let spacing = new Size(5, 5)
@@ -65,7 +65,7 @@ type SubjectDialog() as this =
     member this.onok() =
         let nameval = txtName.Text
         if not (nameval.Equals("")) then
-            AppConstants.currentstate.subjectid <- Database.insertsubject AppConstants.currentstate.bookid nameval
+            AppConstants.currentstate.chapterid <- Database.insertchapter AppConstants.currentstate.subjectid nameval
 
         this.Close()
 

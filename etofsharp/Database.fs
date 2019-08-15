@@ -78,15 +78,47 @@ module Database =
         connection.Close()
 
 
-    let insertsubject name =
-        let query = "insert into subject (name) values (@Name)"
+    let insertsubject bookid name =
+        let query = "insert into subject (bookid, name) values (@BookId, @Name); select currval('subject_id_seq');"
         use com = connection.CreateCommand()
         com.CommandText <- query
         com.CommandType <- CommandType.Text
+
+        let bookidparam = com.CreateParameter()
+        bookidparam.ParameterName <- "@BookId"
+        bookidparam.DbType <- DbType.Int32
+        bookidparam.Value <- bookid
+        com.Parameters.Add(bookidparam) |> ignore
+
         let param = com.CreateParameter()
         param.ParameterName <- "@Name"
         param.Value <- name
         param.DbType <- DbType.String
         com.Parameters.Add(param) |> ignore
-        let rows = com.ExecuteNonQuery()
-        printfn "Rows inserted: %i" rows
+
+
+        let id = com.ExecuteScalar()
+        let insertedId = id :?> int64
+        printfn "id inserted: %A" insertedId
+        insertedId
+
+    let insertchapter subjectid name =
+        let query = "insert into chapter (subjectid, name) values (@SubjectId, @Name); select currval('chapter_id_seq');"   
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+
+        let idparam = com.CreateParameter()
+        idparam.ParameterName <- "@SubjectId"
+        idparam.DbType <- DbType.Int32
+        idparam.Value <- subjectid
+        com.Parameters.Add(idparam) |> ignore
+
+        let param = com.CreateParameter()
+        param.ParameterName <- "@Name"
+        param.Value <- name
+        param.DbType <- DbType.String
+        com.Parameters.Add(param) |> ignore
+
+        let id = com.ExecuteScalar()
+        id :?> int64

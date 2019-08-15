@@ -87,5 +87,6 @@ module Database =
         param.ParameterName <- "@Name"
         param.Value <- name
         param.DbType <- DbType.String
+        com.Parameters.Add(param) |> ignore
         let rows = com.ExecuteNonQuery()
         printfn "Rows inserted: %i" rows

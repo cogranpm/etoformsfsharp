@@ -11,6 +11,8 @@ module Database =
     let connectionStringName = "golangtest"
     let mutable connection : DbConnection = null
 
+    type Subject = {Id:int; Name:string}
+
     let findconnectionstringbyname (name: string) (settings: ConnectionStringSettingsCollection) =
         let fooseq = Seq.cast<ConnectionStringSettings> settings
         let foo = Seq.find (fun (i: ConnectionStringSettings) -> i.Name.Equals(name)) fooseq
@@ -74,3 +76,16 @@ module Database =
 
     let closedatabase () =
         connection.Close()
+
+
+    let insertsubject name =
+        let query = "insert into subject (name) values (@Name)"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+        let param = com.CreateParameter()
+        param.ParameterName <- "@Name"
+        param.Value <- name
+        param.DbType <- DbType.String
+        let rows = com.ExecuteNonQuery()
+        printfn "Rows inserted: %i" rows

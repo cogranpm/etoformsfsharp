@@ -8,6 +8,9 @@ open db
 
 type SubjectDialog() as this =
     inherit Dialog()
+
+    let mutable txtName: TextBox = new TextBox()
+
     do
         base.Title <- "Subject"
         base.ClientSize <- new Size(600, 600)
@@ -22,8 +25,6 @@ type SubjectDialog() as this =
 
         let lblName = new Label()
         lblName.Text <- "Name:"
-
-        let txtName = new TextBox()
 
         let btnOK = new Button()
         btnOK.Text <- "OK"
@@ -58,8 +59,13 @@ type SubjectDialog() as this =
         layout.Rows.Add(null)
         base.Content <- layout
 
+   
+
     member this.onok() =
-        
+        let nameval = txtName.Text
+        if not (nameval.Equals("")) then
+            Database.insertsubject(nameval)
+
         this.Close()
 
     member this.oncancel() =

@@ -6,6 +6,7 @@ open Eto.Drawing
 
 open AppConstants
 open db
+open parinherm
 
 
 
@@ -100,6 +101,8 @@ type MainForm () as this =
 
 
     member this.somefunc() = 
+        let subjectDialog = new SubjectDialog()
+        let result = subjectDialog.ShowModal(this)
         printfn("hello there")
         (* all old stuff
         // table with three rows

@@ -10,8 +10,8 @@
   <ItemGroup>
     <Compile Include="Database.fs" />
     <Compile Include="Constants.fs" />
-    <Compile Include="MainForm.fs" />
     <Compile Include="SubjectDialog.fs" />
+    <Compile Include="MainForm.fs" />
   </ItemGroup>
   <ItemGroup></ItemGroup>
   <ItemGroup>

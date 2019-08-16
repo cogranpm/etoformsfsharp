@@ -35,7 +35,8 @@ type ChapterDialog() as this =
         btnCancel.Text <- "Cancel"
         btnCancel.Click.Add(fun e -> this.oncancel())
 
-        base.DefaultButton <- btnCancel
+        base.DefaultButton <- btnOK
+        base.AbortButton <- btnCancel
 
         let headerRow = new TableRow()
         layout.Rows.Add(headerRow)

@@ -86,12 +86,15 @@ type MainForm () as this =
         cmdNew.Executed.Add(fun e -> MessageBox.Show(this, "New Clicked") |> ignore)
 
         let cmdNewSubject = new Command(MenuText="New &Subject", ToolBarText="Subject")
+        cmdNewSubject.Shortcut <- Application.Instance.CommonModifier ||| Keys.J
         cmdNewSubject.Executed.Add(fun e -> this.newsubject() |> ignore)
 
         let cmdNewChapter = new Command(MenuText="New &Chapter", ToolBarText="Chapter")
+        cmdNewChapter.Shortcut <- Application.Instance.CommonModifier ||| Keys.P
         cmdNewChapter.Executed.Add(fun e -> this.newchapter() |> ignore)
 
         let cmdNewNote = new Command(MenuText="New &Note", ToolBarText="Note")
+        cmdNewNote.Shortcut <- Application.Instance.CommonModifier ||| Keys.N
         cmdNewNote.Executed.Add(fun e -> this.newnote() |> ignore)
 
         let quitCommand = new Command(MenuText = "Quit")
@@ -141,6 +144,7 @@ type MainForm () as this =
     member this.newchapter() = 
        let dialog = new ChapterDialog()
        let result = dialog.ShowModal(this)
+       this.renderchapters()
        result
 
     member this.newnote() =

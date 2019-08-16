@@ -2,6 +2,7 @@
 
 module Database =
 
+    open System
     open System.Data
     open System.Data.Common
     open System.Configuration
@@ -11,6 +12,7 @@ module Database =
     //let connectionString = "Host=localhost;Username=paulm;Password=reddingo;Database=golangtest"
     //let conn = new Npgsql.NpgsqlConnection(connectionString)
     let connectionStringName = "golangtest"
+    let defaultconnectionstring = "Server=kronmintdesktop;Username=paulm;Password=reddingo;Database=golangtest"
     let mutable connection : DbConnection = null
 
     type Subject = {Id:int; Name:string}
@@ -21,21 +23,16 @@ module Database =
         match foo with
         | null -> None
         | _ -> Some(foo.ConnectionString)
-       
-        (*
-        for setting in settings do
-            if setting.Name.Equals(name) then
-                let connectString = setting.ConnectionString
-                ""
-            else
-                ""
-        *)
+
 
     let getconnectionstring (name: string) =
-        let settings = ConfigurationManager.ConnectionStrings
-        match settings with 
-        | null -> None
-        | _ -> Some(findconnectionstringbyname name settings)
+        try
+            let settings = ConfigurationManager.ConnectionStrings
+            match settings with 
+            | null -> None
+            | _ -> findconnectionstringbyname name settings
+        with
+            |  ex -> printfn "%A" ex; Some(defaultconnectionstring)
 
 
 
@@ -43,7 +40,7 @@ module Database =
         let constring = getconnectionstring connectionStringName
         let connectionstring = 
             match constring with 
-            | Some(constring) -> Option.get(constring)
+            | Some(constring) -> constring
             | None -> ""
         let factory: DbProviderFactory = DbProviderFactories.GetFactory("Npgsql");
         connection <- factory.CreateConnection()

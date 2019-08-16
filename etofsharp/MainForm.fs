@@ -53,12 +53,23 @@ type MainForm () as this =
 
         //change this, lstnote should be a treetable maybe
         //then two text areas for body and script
-        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstchapter), new TableCell( txtbody )))
+        let listrow = new TableRow()
+        listrow.Cells.Add(new TableCell(lstnote))
+        let bodyrow = new TableRow()
+        bodyrow.Cells.Add(new TableCell(txtbody))
+        let scriptrow = new TableRow()
+        scriptrow.Cells.Add(new TableCell(txtscript))
+        let layoutnotes = new TableLayout()
+        layoutnotes.Rows.Add(listrow)
+        layoutnotes.Rows.Add(bodyrow)
+        layoutnotes.Rows.Add(scriptrow)
+        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstchapter), new TableCell(layoutnotes)))
 
         panel2.Content <- layoutPanel2
 
         listbox.SelectedIndexChanged.Add(fun e -> this.selectsubject)
         lstchapter.SelectedIndexChanged.Add(fun e -> this.selectchapter)
+        lstnote.SelectedKeyChanged.Add(fun e -> this.selectnote())
 
         splitter.Panel1 <- panel1
         splitter.Panel2 <- panel2 
@@ -163,9 +174,25 @@ type MainForm () as this =
 
 
     member this.rendernotes() =
-        let text = AppConstants.currentstate.chapterid.ToString()
-        txtbody.Text <- text
+        let notelist = Database.getnotes AppConstants.currentstate.chapterid
+        List.iter( fun (x: AppConstants.intrecord) -> 
+        lstnote.Items.Add(new ListItem(Text=x.name, Key=x.id.ToString()))) notelist
 
+    member this.selectnote() =
+        let selectedkey: string = lstnote.SelectedKey
+        match selectedkey with
+        null -> printfn "null"
+        | _ -> 
+        ( 
+        let note = Database.getnote AppConstants.currentstate.noteid
+        this.rendernote note 
+        )
+            
+
+    member this.rendernote (note: AppConstants.noterecord) =
+        txtbody.Text <- note.body
+        txtscript.Text <- note.script
+              
 
         (* all old stuff
         // table with three rows

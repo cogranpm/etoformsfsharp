@@ -136,6 +136,34 @@ module Database =
 
         results
 
+    let getnotes chapterid =
+        let query = "select id, chapterid, name from note where chapterid = @ChapterId"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+        let paramchapter = getintparameter com "@ChapterId" chapterid
+        use reader = com.ExecuteReader()
+
+        let results = 
+            [while reader.Read() do
+                yield {id = reader.GetInt64(0); name= reader.GetString(2)}]
+
+        results
+
+    let getnote noteid =
+        let query = "select name, body, script from note where id = @NoteId"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+        let paramchapter = getintparameter com "@NoteId" noteid
+        use reader = com.ExecuteReader()
+
+        let results = 
+            [while reader.Read() do
+                yield {name = reader.GetString(0); body= reader.GetString(1); script=reader.GetString(2)}]
+
+        results.Head
+
     let insertsubject bookid name =
         let query = "insert into subject (bookid, name) values (@BookId, @Name); select currval('subject_id_seq');"
         use com = connection.CreateCommand()

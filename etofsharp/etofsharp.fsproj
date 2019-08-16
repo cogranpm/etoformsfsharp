@@ -12,6 +12,7 @@
     <Compile Include="Database.fs" />
     <Compile Include="SubjectDialog.fs" />
     <Compile Include="ChapterDialog.fs" />
+    <Compile Include="NoteDialog.fs" />
     <Compile Include="MainForm.fs" />
   </ItemGroup>
   <ItemGroup></ItemGroup>

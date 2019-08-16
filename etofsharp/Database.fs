@@ -79,6 +79,22 @@ module Database =
     let closedatabase () =
         connection.Close()
 
+    let getstringparameter (command:DbCommand) name value =
+        let param = command.CreateParameter()
+        param.ParameterName <- name
+        param.Value <- value
+        param.DbType <- DbType.String
+        command.Parameters.Add(param) |> ignore
+        param
+
+    let getintparameter (command:DbCommand) name value =
+        let param = command.CreateParameter()
+        param.ParameterName <- name
+        param.Value <- value
+        param.DbType <- DbType.Int32
+        command.Parameters.Add(param) |> ignore
+        param
+
     let getsubjects bookid =
         let query = "select id, bookid, name from subject where bookid = @BookId"
         use com = connection.CreateCommand()
@@ -117,7 +133,6 @@ module Database =
         let results = 
             [while reader.Read() do
                 yield {id = reader.GetInt64(0); name= reader.GetString(2)}]
-            //printfn "id:%i name:%s" (reader.GetInt64(0)) (reader.GetString(2))
 
         results
 
@@ -165,3 +180,15 @@ module Database =
 
         let id = com.ExecuteScalar()
         id :?> int64
+
+    let insertnote chapterid name body script =
+        let query = "insert into note (chapterid, name, body, script) values (@ChapterId, @Name, @Body, @Script); select currval('note_id_seq');"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        let paramchapter = getintparameter com "@ChapterId" chapterid
+        let paramname = getstringparameter com "@Name" name
+        let parambody = getstringparameter com "@Body" body
+        let paramscript = getstringparameter com "@Script" script
+        let id = com.ExecuteScalar()
+        id :?> int64
+

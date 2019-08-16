@@ -15,7 +15,9 @@ type MainForm () as this =
 
     let listbox = new ListBox()
     let lstchapter = new ListBox()
-    let txtBody = new RichTextArea()
+    let lstnote = new ListBox()
+    let txtbody = new TextArea()
+    let txtscript = new TextArea()
 
     //this is the constructor
     do
@@ -49,8 +51,9 @@ type MainForm () as this =
         let gridview = new GridView()
         gridview.Columns.Add(new GridColumn(HeaderText = "magnificent"))
 
-
-        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstchapter), new TableCell( txtBody )))
+        //change this, lstnote should be a treetable maybe
+        //then two text areas for body and script
+        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstchapter), new TableCell( txtbody )))
 
         panel2.Content <- layoutPanel2
 
@@ -77,6 +80,9 @@ type MainForm () as this =
         let cmdNewChapter = new Command(MenuText="New &Chapter", ToolBarText="Chapter")
         cmdNewChapter.Executed.Add(fun e -> this.newchapter() |> ignore)
 
+        let cmdNewNote = new Command(MenuText="New &Note", ToolBarText="Note")
+        cmdNewNote.Executed.Add(fun e -> this.newnote() |> ignore)
+
         let quitCommand = new Command(MenuText = "Quit")
         quitCommand.Shortcut <- Application.Instance.CommonModifier ||| Keys.Q
         quitCommand.Executed.Add(fun e -> Application.Instance.Quit())
@@ -98,6 +104,7 @@ type MainForm () as this =
         let editItem = new ButtonMenuItem(Text = "&Edit")
         editItem.Items.Add(cmdNewSubject) |> ignore
         editItem.Items.Add(cmdNewChapter) |> ignore
+        editItem.Items.Add(cmdNewNote) |> ignore
         base.Menu.Items.Add(editItem)
 
         let viewItem = new ButtonMenuItem(Text = "&View")
@@ -113,18 +120,22 @@ type MainForm () as this =
         base.ToolBar.Items.Add(cmdNew)
 
 
-        //Database.runtestquery()
 
 
     member this.newsubject() = 
         let subjectDialog = new SubjectDialog()
         let result = subjectDialog.ShowModal(this)
-        0
+        result
 
     member this.newchapter() = 
        let dialog = new ChapterDialog()
        let result = dialog.ShowModal(this)
-       0
+       result
+
+    member this.newnote() =
+        let notedialog = new NoteDialog()
+        let result = notedialog.ShowModal(this)
+        result
 
     member this.clearlistbox (list: ListBox) = 
         list.Items.Clear()
@@ -134,19 +145,27 @@ type MainForm () as this =
         //get the selected key in the list and convert to an int64
         let selectedKey = listbox.SelectedKey
         AppConstants.currentstate.subjectid <- selectedKey |> int64
-        match currentstate.subjectid with
-        | 0L ->  List.iter( fun (x: String) -> lstchapter.Items.Add(x)) AppConstants.syntaxSubjects
-        | _ -> printfn "nothing selected"
+        this.renderchapters()
+
+    member this.renderchapters() =
+        if AppConstants.currentstate.subjectid > 0L then
+            let chapterlist = Database.getchapters AppConstants.currentstate.subjectid
+            List.iter( fun (x: AppConstants.intrecord) -> 
+            lstchapter.Items.Add(new ListItem(Text=x.name, Key=x.id.ToString()))) chapterlist
 
 
     member this.selectchapter = 
-        let text = 
-                   match lstchapter.SelectedIndex with
-                        | 0 -> "variables"
-                        | 1 -> "lists"
-                        | 2 -> "functions"
-                        | _ -> "f"
-        txtBody.Text <- text
+        let selectedkey: string = lstchapter.SelectedKey
+        let isnull = match selectedkey with null -> true |_ -> false
+        if not isnull then
+            AppConstants.currentstate.chapterid <- selectedkey |> int64
+            this.rendernotes()
+
+
+    member this.rendernotes() =
+        let text = AppConstants.currentstate.chapterid.ToString()
+        txtbody.Text <- text
+
 
         (* all old stuff
         // table with three rows

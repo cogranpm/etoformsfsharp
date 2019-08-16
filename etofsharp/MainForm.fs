@@ -12,14 +12,25 @@ open parinherm
 
 type MainForm () as this =
     inherit Form()
+
+    let listbox = new ListBox()
+    let lstchapter = new ListBox()
+    let txtBody = new RichTextArea()
+
     //this is the constructor
     do
         base.Title <- AppConstants.APP_NAME
         base.ClientSize <- new Size(400, 350)
         this.Closed.Add(fun e -> Database.closedatabase())
+        Database.opendatabase()
 
-        let listbox = new ListBox()
-        List.iter( fun (x: String) -> listbox.Items.Add(x)) AppConstants.subjects
+
+        (*listbox.ItemTextBinding = Binding.Property(fun (t: AppConstants.intrecord) -> t.Name) |> ignore
+        listbox.ItemKeyBinding = Binding.Property(fun (t:AppConstants.intrecord) -> t.id) |> ignore
+        listbox.DataStore <- AppConstants.subjects
+        *)
+        let listsubjects = Database.getsubjects AppConstants.currentstate.bookid
+        List.iter( fun (x: AppConstants.intrecord) -> listbox.Items.Add( new ListItem(Text=x.name, Key=x.id.ToString()) )) listsubjects
 
         //splitter
         let splitter = new Splitter()
@@ -32,19 +43,19 @@ type MainForm () as this =
 
         //panel 2
         let panel2 = new Panel()
-        let lstSubjectBody = new ListBox()
-        lstSubjectBody.Width <- 200
+
+        lstchapter.Width <- 200
 
         let gridview = new GridView()
         gridview.Columns.Add(new GridColumn(HeaderText = "magnificent"))
 
-        let txtBody = new RichTextArea()
-        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstSubjectBody), new TableCell( txtBody )))
+
+        let layoutPanel2 = new TableLayout(new TableRow(new TableCell(lstchapter), new TableCell( txtBody )))
 
         panel2.Content <- layoutPanel2
 
-        listbox.SelectedIndexChanged.Add(fun e -> AppConstants.selectsubject listbox lstSubjectBody)
-        lstSubjectBody.SelectedIndexChanged.Add(fun e -> AppConstants.selectsyntax lstSubjectBody txtBody)
+        listbox.SelectedIndexChanged.Add(fun e -> this.selectsubject)
+        lstchapter.SelectedIndexChanged.Add(fun e -> this.selectchapter)
 
         splitter.Panel1 <- panel1
         splitter.Panel2 <- panel2 
@@ -76,9 +87,6 @@ type MainForm () as this =
             dlg.ShowDialog(this) |> ignore
             )
 
-        Database.opendatabase()
-        //Database.runinsertcommand()
-        Database.runtestquery()
 
         base.Menu <- new MenuBar()
         let fileItem = new ButtonMenuItem(Text = "&File")
@@ -105,6 +113,9 @@ type MainForm () as this =
         base.ToolBar.Items.Add(cmdNew)
 
 
+        //Database.runtestquery()
+
+
     member this.newsubject() = 
         let subjectDialog = new SubjectDialog()
         let result = subjectDialog.ShowModal(this)
@@ -115,6 +126,27 @@ type MainForm () as this =
        let result = dialog.ShowModal(this)
        0
 
+    member this.clearlistbox (list: ListBox) = 
+        list.Items.Clear()
+
+    member this.selectsubject =
+    //    clearlistbox listboxsubjects |> ignore
+        //get the selected key in the list and convert to an int64
+        let selectedKey = listbox.SelectedKey
+        AppConstants.currentstate.subjectid <- selectedKey |> int64
+        match currentstate.subjectid with
+        | 0L ->  List.iter( fun (x: String) -> lstchapter.Items.Add(x)) AppConstants.syntaxSubjects
+        | _ -> printfn "nothing selected"
+
+
+    member this.selectchapter = 
+        let text = 
+                   match lstchapter.SelectedIndex with
+                        | 0 -> "variables"
+                        | 1 -> "lists"
+                        | 2 -> "functions"
+                        | _ -> "f"
+        txtBody.Text <- text
 
         (* all old stuff
         // table with three rows

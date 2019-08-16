@@ -8,8 +8,8 @@
     <Description>Description of etofsharp</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Database.fs" />
     <Compile Include="Constants.fs" />
+    <Compile Include="Database.fs" />
     <Compile Include="SubjectDialog.fs" />
     <Compile Include="ChapterDialog.fs" />
     <Compile Include="MainForm.fs" />

@@ -6,6 +6,8 @@ module Database =
     open System.Data.Common
     open System.Configuration
 
+    open AppConstants
+
     //let connectionString = "Host=localhost;Username=paulm;Password=reddingo;Database=golangtest"
     //let conn = new Npgsql.NpgsqlConnection(connectionString)
     let connectionStringName = "golangtest"
@@ -77,6 +79,47 @@ module Database =
     let closedatabase () =
         connection.Close()
 
+    let getsubjects bookid =
+        let query = "select id, bookid, name from subject where bookid = @BookId"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+
+        let bookidparam = com.CreateParameter()
+        bookidparam.ParameterName <- "@BookId"
+        bookidparam.DbType <- DbType.Int32
+        bookidparam.Value <- bookid
+        com.Parameters.Add(bookidparam) |> ignore
+
+        use reader = com.ExecuteReader()
+
+        let results = 
+            [while reader.Read() do
+                yield {id = reader.GetInt64(0); name= reader.GetString(2)}]
+            //printfn "id:%i name:%s" (reader.GetInt64(0)) (reader.GetString(2))
+
+        results
+
+    let getchapters subjectid =
+        let query = "select id, subjectid, name from chapter where subjectid = @SubjectId"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+
+        let bookidparam = com.CreateParameter()
+        bookidparam.ParameterName <- "@SubjectId"
+        bookidparam.DbType <- DbType.Int32
+        bookidparam.Value <- subjectid
+        com.Parameters.Add(bookidparam) |> ignore
+
+        use reader = com.ExecuteReader()
+
+        let results = 
+            [while reader.Read() do
+                yield {id = reader.GetInt64(0); name= reader.GetString(2)}]
+            //printfn "id:%i name:%s" (reader.GetInt64(0)) (reader.GetString(2))
+
+        results
 
     let insertsubject bookid name =
         let query = "insert into subject (bookid, name) values (@BookId, @Name); select currval('subject_id_seq');"

@@ -7,6 +7,7 @@ open Eto.Drawing
 let APP_NAME = "kernai"
 
 type appstate =  {mutable bookid:int64; mutable subjectid:int64; mutable chapterid:int64}
+type intrecord = {id:int64; name:string}
 let currentstate = {bookid=3L; subjectid=0L; chapterid=0L}
 
 //list of subjects
@@ -17,20 +18,4 @@ let syntaxfunctions = "
 let square x = x * x
 "
 
-let clearlistbox (list: ListBox) = 
-    list.Items.Clear()
 
-let selectsubject (listboxsubjects: ListBox) (listboxsyntax: ListBox) =
-    clearlistbox listboxsyntax |> ignore
-    match listboxsubjects.SelectedIndex with
-    | 0 ->  List.iter( fun (x: String) -> listboxsyntax.Items.Add(x)) syntaxSubjects
-    | _ -> printfn "nothing selected"
-
-let selectsyntax (listboxsyntax: ListBox) (textbox: RichTextArea) = 
-    let text = 
-               match listboxsyntax.SelectedIndex with
-                    | 0 -> "variables"
-                    | 1 -> "lists"
-                    | 2 -> "functions"
-                    | _ -> "f"
-    textbox.Text <- text

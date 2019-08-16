@@ -92,6 +92,18 @@ module Database =
         command.Parameters.Add(param) |> ignore
         param
 
+    let getbooks() =
+        let query = "select id, name from book"
+        use com = connection.CreateCommand()
+        com.CommandText <- query
+        com.CommandType <- CommandType.Text
+        use reader = com.ExecuteReader()
+        let results = 
+            [while reader.Read() do
+                yield {id = reader.GetInt64(0); name= reader.GetString(1)}]
+       
+        results
+
     let getsubjects bookid =
         let query = "select id, bookid, name from subject where bookid = @BookId"
         use com = connection.CreateCommand()

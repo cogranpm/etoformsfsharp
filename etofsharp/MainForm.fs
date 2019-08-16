@@ -18,6 +18,7 @@ type MainForm () as this =
     let lstnote = new ListBox()
     let txtbody = new TextArea()
     let txtscript = new TextArea()
+    let cbobooks = new ComboBox()
 
     //this is the constructor
     do
@@ -31,6 +32,7 @@ type MainForm () as this =
         listbox.ItemKeyBinding = Binding.Property(fun (t:AppConstants.intrecord) -> t.id) |> ignore
         listbox.DataStore <- AppConstants.subjects
         *)
+        this.renderbooks()
         let listsubjects = Database.getsubjects AppConstants.currentstate.bookid
         List.iter( fun (x: AppConstants.intrecord) -> listbox.Items.Add( new ListItem(Text=x.name, Key=x.id.ToString()) )) listsubjects
 
@@ -40,6 +42,7 @@ type MainForm () as this =
         //panel 1
         let panel1 = new Panel()
         let layoutPanel1 = new TableLayout()
+        layoutPanel1.Rows.Add(new TableRow(new TableCell(cbobooks)))
         layoutPanel1.Rows.Add(new TableRow(new TableCell(listbox)))
         panel1.Content <- layoutPanel1
 
@@ -134,7 +137,11 @@ type MainForm () as this =
         base.ToolBar.Items.Add(cmdNew)
 
 
-
+    member this.renderbooks() =
+        cbobooks.Items.Clear()
+        let lstbooks = Database.getbooks()
+        List.iter( fun (x: AppConstants.intrecord) -> 
+        cbobooks.Items.Add(new ListItem(Text=x.name, Key=x.id.ToString()))) lstbooks
 
     member this.newsubject() = 
         let subjectDialog = new SubjectDialog()

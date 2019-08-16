@@ -12,7 +12,7 @@ module Database =
     //let connectionString = "Host=localhost;Username=paulm;Password=reddingo;Database=golangtest"
     //let conn = new Npgsql.NpgsqlConnection(connectionString)
     let connectionStringName = "golangtest"
-    let defaultconnectionstring = "Server=kronmintdesktop;Username=paulm;Password=reddingo;Database=golangtest"
+    let defaultconnectionstring = "Host=kronmintdesktop;Username=paulm;Password=reddingo;Database=golangtest"
     let mutable connection : DbConnection = null
 
     type Subject = {Id:int; Name:string}

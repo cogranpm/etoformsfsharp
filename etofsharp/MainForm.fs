@@ -159,6 +159,7 @@ type MainForm () as this =
         this.renderchapters()
 
     member this.renderchapters() =
+        this.clearlistbox lstchapter
         if AppConstants.currentstate.subjectid > 0L then
             let chapterlist = Database.getchapters AppConstants.currentstate.subjectid
             List.iter( fun (x: AppConstants.intrecord) -> 
@@ -174,6 +175,7 @@ type MainForm () as this =
 
 
     member this.rendernotes() =
+        this.clearlistbox lstnote
         let notelist = Database.getnotes AppConstants.currentstate.chapterid
         List.iter( fun (x: AppConstants.intrecord) -> 
         lstnote.Items.Add(new ListItem(Text=x.name, Key=x.id.ToString()))) notelist
@@ -184,6 +186,7 @@ type MainForm () as this =
         null -> printfn "null"
         | _ -> 
         ( 
+        AppConstants.currentstate.noteid <- selectedkey |> int64
         let note = Database.getnote AppConstants.currentstate.noteid
         this.rendernote note 
         )

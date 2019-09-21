@@ -32,9 +32,9 @@ type MainForm () as this =
         listbox.ItemKeyBinding = Binding.Property(fun (t:AppConstants.intrecord) -> t.id) |> ignore
         listbox.DataStore <- AppConstants.subjects
         *)
-        this.renderbooks()
-        let listsubjects = Database.getsubjects AppConstants.currentstate.bookid
-        List.iter( fun (x: AppConstants.intrecord) -> listbox.Items.Add( new ListItem(Text=x.name, Key=x.id.ToString()) )) listsubjects
+        //this.renderbooks()
+        //let listsubjects = Database.getsubjects AppConstants.currentstate.bookid
+        //List.iter( fun (x: AppConstants.intrecord) -> listbox.Items.Add( new ListItem(Text=x.name, Key=x.id.ToString()) )) listsubjects
 
         //splitter
         let splitter = new Splitter()
@@ -166,7 +166,9 @@ type MainForm () as this =
     //    clearlistbox listboxsubjects |> ignore
         //get the selected key in the list and convert to an int64
         let selectedKey = listbox.SelectedKey
-        AppConstants.currentstate.subjectid <- selectedKey |> int64
+        match selectedKey with
+        | null -> ()
+        | _ -> AppConstants.currentstate.subjectid <- selectedKey |> int64
         this.renderchapters()
 
     member this.renderchapters() =
